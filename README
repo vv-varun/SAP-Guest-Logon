@@ -1,0 +1,42 @@
+SAP Guest Logon by Varun Verma
+
+===== Build ======
+Builds on Android 2.1 or better.
+You will have to download the Google Analytics library separately and link it.
+
+===== Installation ======
+Install the application on any android device from the Android market.
+To find the application on Android market, search with terms: SAP Guest Logon
+Alternatively, access the market directly using url: 
+https://market.android.com/details?id=org.varunverma.sapguestlogon
+
+
+===== Usage ======
+a) Configure your User Id / Password.
+b) Maintain advanced settings (optional but recommended)
+c) Eiter launch the application manually OR just enter in the Guest network range. 
+The application will launch automatically.
+
+
+===== Bug Reporting ======
+Please use the Git Hub issue tracker. OR drop an email to varunverma@varunverma.org
+
+
+===== Copyright and License ======
+SAP Guest Logon provides you one touch & automatic logon into SAP's Guest network.
+This program is developed by Varun Verma for Android OS
+	
+Copyright (c) 2011 Varun Verma (http://varunverma.org)
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.

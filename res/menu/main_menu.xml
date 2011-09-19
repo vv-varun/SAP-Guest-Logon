@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<item android:icon="@drawable/icon_settings"
+		android:id="@+id/settings" 
+		android:title="@string/settings" >
+	</item>
+
+	<item android:id="@+id/Help"
+		android:title="@string/help"
+		android:icon="@drawable/help" >
+	</item>
+
+	<item android:id="@+id/Advanced"
+		android:title="Advanced"
+		android:icon="@drawable/advanced" >
+		
+		<!-- Advanced submenu -->
+        <menu>
+        	<item android:id="@+id/About"
+				android:title="@string/about"
+				android:icon="@drawable/info">
+			</item>
+			<item android:id="@+id/New"
+				android:title="@string/New"
+				android:icon="@drawable/icon_new">
+			</item>
+            <item android:id="@+id/ExtraSettings"
+				android:title="Extra Settings" >
+			</item>
+			<item android:id="@+id/EULA"
+				android:title="End-User License Agreement" >
+			</item>
+        </menu>
+        		
+	</item>
+	
+</menu>
