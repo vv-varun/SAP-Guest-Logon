@@ -5,6 +5,7 @@
     <string name="about">About</string>
     <string name="app_name">SAP Guest Logon</string>
     <string name="New">Whats new</string>
+    <string name="seed">MadarChod</string>
     
     <color name="white">#ffffffff</color>
     <color name="black">#ff000000</color>

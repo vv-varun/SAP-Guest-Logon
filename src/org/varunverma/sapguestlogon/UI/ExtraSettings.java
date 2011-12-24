@@ -33,6 +33,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -85,6 +86,8 @@ public class ExtraSettings extends Activity
 		String text = "";
 		this.setTitle("SAP Guest Logon: Extra Preferences");
 		application = Application.get_instance();
+		
+		Log.v(Application.TAG, "User on Extra Settings Screen");
 				
         tv_help = (TextView) findViewById(R.id.Help);
         tv_help.setTextColor(Color.GREEN);
@@ -120,6 +123,11 @@ public class ExtraSettings extends Activity
 			decrypted = true;
 		}
 		
+		// Logging Default Values
+		Log.i(Application.TAG, "Default Values:");
+		Log.i(Application.TAG, "Analytics is Enabled?=" + application.AnalyticsEnabled);
+		Log.i(Application.TAG, "Encryption is Enabled?=" + application.EncryptionEnabled);
+		Log.i(Application.TAG, "AutoLogon is Enabled?=" + application.AutomaticLogon);
 	}
 
 	public void onClick(View view) {
@@ -184,6 +192,12 @@ public class ExtraSettings extends Activity
 		editor.putBoolean("Encryption", encrypt.isChecked());
 		editor.putBoolean("AutomaticLogon", AutoLogon.isChecked());
 		
+		// Logging Changed Values
+		Log.i(Application.TAG, "New Values:");
+		Log.i(Application.TAG, "Analytics is Enabled?=" + analytics.isChecked());
+		Log.i(Application.TAG, "Encryption is Enabled?=" + encrypt.isChecked());
+		Log.i(Application.TAG, "AutoLogon is Enabled?=" + AutoLogon.isChecked());
+		
 		editor.commit();
 		
 		// Reload Preferences after Save.
@@ -237,7 +251,7 @@ public class ExtraSettings extends Activity
 	
 	private void encryptionToggled(boolean Encryption){
 		
-		if(Encryption){	// Mean Extreme Encruption.
+		if(Encryption){	// Mean Extreme Encryption.
 			// Encryption is enabled now. 
 			// So we need to prompt for master key.
 			String help_text = "Enter your private Key.\n" +

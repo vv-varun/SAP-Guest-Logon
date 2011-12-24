@@ -32,6 +32,7 @@ import org.varunverma.sapguestlogon.Application.Tracker;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 
 /**
  * Service Class to Keep the itnernet connection ON!
@@ -62,6 +63,7 @@ public class LogonService extends Service {
 				
 		if(application.context == null){
 			application.context = getApplicationContext();
+			Log.v(Application.TAG, "Application Initialized from Service.");
 		}
 		
 		if(application.tracker == null){
@@ -69,6 +71,7 @@ public class LogonService extends Service {
 			Tracker tracker = Tracker.getInstance();
 	    	tracker.start("UA-5272745-4", this);
 	    	application.tracker = tracker;
+	    	Log.v(Application.TAG, "Tracker Initialized from Service.");
 		}
 		
 		// Nothing wrong in initialization.
@@ -96,6 +99,7 @@ public class LogonService extends Service {
 		application.tracker.stop();
 		timer.cancel();
 		timer.purge();
+		Log.i(Application.TAG, "Service Stoped!");
 		super.onDestroy();
 	}
 	

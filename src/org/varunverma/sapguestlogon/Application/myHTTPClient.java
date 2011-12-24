@@ -33,9 +33,9 @@ import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.SingleClientConnManager;
-import org.varunverma.sapguestlogon.R;
 
 import android.content.Context;
+import android.util.Log;
 
 public class myHTTPClient extends DefaultHttpClient {
 	
@@ -61,7 +61,10 @@ public class myHTTPClient extends DefaultHttpClient {
             KeyStore trusted = KeyStore.getInstance("BKS");
             // Get the raw resource, which contains the keystore with
             // your trusted certificates (root and any intermediate certs)
-            InputStream in = context.getResources().openRawResource(R.raw.sapwlan);
+            
+            Application application = Application.get_instance();
+            InputStream in = context.getResources().openRawResource(application.CertificateId);
+            
             try {
                 // Initialize the keystore with the provided trusted certificates
                 // Also provide the password of the keystore
@@ -77,6 +80,7 @@ public class myHTTPClient extends DefaultHttpClient {
             sf.setHostnameVerifier(SSLSocketFactory.STRICT_HOSTNAME_VERIFIER);
             return sf;
         } catch (Exception e) {
+        	Log.e(Application.TAG, "Error in SSL Socket Factory", e);
             throw new AssertionError(e);
         }
     }

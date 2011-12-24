@@ -26,6 +26,6 @@ package org.varunverma.sapguestlogon.Application;
 public interface LogonTaskProgressUpdate {
 	
 	public void UpdateTextView(String message);
-	public void TaskFinished(boolean result);
+	public void TaskFinished(LogonResult result);
 
 }

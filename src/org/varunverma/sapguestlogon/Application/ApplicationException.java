@@ -89,5 +89,13 @@ class URLRedirected extends ApplicationException {
 	public String get_redirected_url(){
 		return redirected_url;
 	}
-	
+
+}
+
+@SuppressWarnings("serial")
+class BADURLRedirection extends URLRedirected {
+
+	public BADURLRedirection(String url) {
+		super(url);
+	}
 }

@@ -25,6 +25,7 @@ package org.varunverma.sapguestlogon.UI;
 
 import org.varunverma.sapguestlogon.R;
 import org.varunverma.sapguestlogon.Application.Application;
+import org.varunverma.sapguestlogon.Application.LogonResult;
 import org.varunverma.sapguestlogon.Application.LogonTask;
 import org.varunverma.sapguestlogon.Application.LogonTaskProgressUpdate;
 import org.varunverma.sapguestlogon.Application.SimpleCrypto;
@@ -36,6 +37,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -60,18 +62,20 @@ public class SAPGuestLogon extends Activity implements LogonTaskProgressUpdate, 
     public void onCreate(Bundle savedInstanceState) {
         
     	super.onCreate(savedInstanceState);
-    	
+    	   	
     	// Initialize Application.
     	application = Application.get_instance();
     	application.context = getApplicationContext();
     	application.seedkey = R.string.seed;
     	application.initialize();
+    	Log.v(Application.TAG, "Application Initialized.");
 
     	// Track via Google Analytics.
     	tracker = Tracker.getInstance();
     	tracker.start("UA-5272745-4", this);
+    	Log.v(Application.TAG, "Tracker Initialized.");
     	application.tracker = tracker;
-    	tracker.trackEvent("Version", "Version", "6.7", 0);
+    	tracker.trackEvent("Version", "Version", Application.Version, 0);
     	tracker.trackPageView("/Main");
     	
     	setContentView(R.layout.main);
@@ -96,6 +100,7 @@ public class SAPGuestLogon extends Activity implements LogonTaskProgressUpdate, 
         tv.setText("Welcome...\n");
 
         if(application.user.equals("")){
+        	Log.v(Application.TAG, "Re-directing to the Preferences Screen to maintain logon data");
         	tv.append("Logon data not found!... Redirecting to preferences screen...\n");
         	Toast.makeText(application.context, "Maintain Logon Data first!", Toast.LENGTH_LONG).show();
 			Intent my_preferences = new Intent(SAPGuestLogon.this, myPreferences.class);
@@ -140,24 +145,26 @@ public class SAPGuestLogon extends Activity implements LogonTaskProgressUpdate, 
 		info = "Encrypted Pwd: " + application.EPassword + "\n";
 		tv.append(info);
 		//*/
+		Log.i(Application.TAG, "Logon Task started");
     	LogonTask logon = new LogonTask(application, this);
 		logon.execute();
 	}
 
 	private void show_whats_new() {
 		
-		int curr_version = 12;
 		int old_version = application.old_version;
 		
-		if(curr_version > old_version){
-					
+		if(Application.current_version > old_version){
+			
+			Log.v(Application.TAG, "Showing what's new in this version.");
+			
 			Intent info = new Intent(SAPGuestLogon.this, DisplayInfo.class);
 			info.putExtra("Type", R.raw.new_features);
 			SAPGuestLogon.this.startActivity(info);
 			
 			SharedPreferences settings = getSharedPreferences(Application.Preferences, 0);
 			SharedPreferences.Editor editor = settings.edit();
-			editor.putInt("Version", curr_version);
+			editor.putInt("Version", Application.current_version);
 			editor.commit();
 		}
 	}
@@ -169,6 +176,7 @@ public class SAPGuestLogon extends Activity implements LogonTaskProgressUpdate, 
 		i.putExtra("Delay", delay);
 		//Start Service.
 		startService(i);
+		Log.i(Application.TAG, "Service Started with a delay of 2 min.");
 	}
 
 	@Override
@@ -234,6 +242,7 @@ public class SAPGuestLogon extends Activity implements LogonTaskProgressUpdate, 
 	@Override
 	protected void onDestroy  (){
 		tracker.dispatch();
+		Log.i(Application.TAG, "Tracker Dispatched, Application closed.");
 		super.onDestroy();
 	}
 	
@@ -249,12 +258,67 @@ public class SAPGuestLogon extends Activity implements LogonTaskProgressUpdate, 
 		tv.append(message);
 	}
 
-	public void TaskFinished(boolean result) {
-        // Start a service to keep the connection on...
-        start_service();
+	public void TaskFinished(LogonResult result) {
+		
+		if(result.isTaskSuccessful()){
+			// Show Success
+			Log.v(Application.TAG, "Logon Task was successfully executed.");
+			UpdateTextView("Done... Bye.\n");
+			start_service();
+		}
+		else{
+			// Failed. See the reason code.
+			if(result.getResultCode() == 1){
+			/*	We are redirected to a BAD URL.
+			 * 	Let's ask the user to if he wants to continue! 
+			 *  Automatic Logon will not be performed.
+			 */
+				Log.w(Application.TAG, "Logon Task Failed - Redirected to BAD URL!");
+				confirmBadURLLogin(result.getBadURL());
+			}
+			else{
+				UpdateTextView("Please try again... \n");
+				Log.w(Application.TAG, "Logon Task Failed!");
+				start_service();
+			}
+
+		}
+        
 	}
 	
+	private void confirmBadURLLogin(String badURL) {
+		// Confirm if user want's to login on BAD URL also !
+		String help_text = "The URL has been redirected to: " + badURL + "\n" +
+				"This is not the correct URL." +
+				"\nDo you want to continue logon on this URL?" +
+				"\nNote: The connection will not be renewed automatically. " +
+				"Since this is a BAD URL, you have to logon manually each time." +
+				"\nTo logon manually, just launch the application and confirm logon.";
+		
+		// Create Dialog box and ask user for the key.
+		dialog = new Dialog(SAPGuestLogon.this);
+		// Set Layout.
+		dialog.setContentView(R.layout.confirm_bad_url);
+		// Set Title.
+		dialog.setTitle("Please confirm...");
+		// Set Texts.
+		TextView help = (TextView) dialog.findViewById(R.id.BadURLHelp);
+		help.setText(help_text);
+
+		// Set the Button Click Listener.
+		Button retrieve = (Button) dialog.findViewById(R.id.logon_bad_url);
+		retrieve.setOnClickListener(this);
+		
+		Button cancel = (Button) dialog.findViewById(R.id.cancel);
+		cancel.setOnClickListener(this);
+		
+		// Now show the dialog.
+		dialog.show();
+	}
+
 	private void retrieveMasterKey(){
+		
+		Log.v(Application.TAG, "Encryption is Enabled. Requesting for Master Key");
 		
 		String help_text = "Enter your private Key.\n" +
 				"If you enter this key wrong, your password cannot be retrieved.\n" +
@@ -290,6 +354,10 @@ public class SAPGuestLogon extends Activity implements LogonTaskProgressUpdate, 
 			decryptPassword();
 			break;
 		
+		case R.id.logon_bad_url:
+			logonBadURL();
+			break;
+			
 		case R.id.cancel:
 			finish();
 			break;
@@ -299,21 +367,41 @@ public class SAPGuestLogon extends Activity implements LogonTaskProgressUpdate, 
 		}
 	}
 
+	private void logonBadURL() {
+		// First try to login.
+		try {
+			Log.w(Application.TAG, "User accepted to Logon with BAD URL !");
+			dialog.dismiss();
+			UpdateTextView("User accepted to logon with BAD URL!\n");
+			UpdateTextView(application.perform_logon());
+		} catch (Exception e) {
+			Log.e(Application.TAG, "Error while logon on BAD URL!", e);
+			UpdateTextView(e.getMessage());
+		}
+		
+		UpdateTextView("\nLogon Service is not started because it's a BAD URL\n");
+		Log.w(Application.TAG, "Logon Service is not started because it's a BAD URL");
+		
+		//TODO -- Send email to user.
+	}
+
 	private void decryptPassword() {
 		// Decrypt Password.
+		Log.v(Application.TAG, "Master Key Retrieved");
 		String mkey = master_key.getText().toString();
 		try {
 			application.password = SimpleCrypto.decrypt(mkey, application.EPassword);
 			dialog.dismiss();
 			application.mkey = mkey;
 			// Now continue with logon.
+			Log.i(Application.TAG, "Logon Data decrypted");
 			performLogon();
 		} catch (Exception e) {
 			// Error. Do not Exit the dialog box.
 			String error = "Error occured while decrypting your password.\n" +
 					"This can be due to wrong master key. Please enter a correct master Key.";
 			Toast.makeText(this, error, Toast.LENGTH_LONG).show();
-			e.printStackTrace();
+			Log.e(Application.TAG, error, e);
 		}
 	}
 	
@@ -335,4 +423,5 @@ public class SAPGuestLogon extends Activity implements LogonTaskProgressUpdate, 
 		
 		}
 	}
+
 }

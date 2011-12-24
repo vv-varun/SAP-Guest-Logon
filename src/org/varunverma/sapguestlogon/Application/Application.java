@@ -26,6 +26,8 @@ package org.varunverma.sapguestlogon.Application;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.net.ssl.SSLException;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -35,20 +37,25 @@ import org.apache.http.message.BasicNameValuePair;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 //	This is the main application class. Will be a singleton.
 
 public class Application {
 	
 	// Static Constants.
+	public static final String TAG = "SAPGuestLogon";
 	static final String success = "Logon successful. Enjoy SAP Guest Network connection :-)";
 	public static final String Preferences = "SAPGuestLogonPreferences";
 	public static final int EULA = 1;
+	public static final int current_version = 12;
+	public static final String Version = "6.7";
 	
 	// Google Analytics Tracker.
 	public Tracker tracker;
 	
 	// Logon Data
+	String logonURL;						// Logon URL.
 	public String user, password;			// In un-encrypted format.
 	public String EPassword;				// Encrypted Logon Data.
 	public String mkey;						// Master Key -- In case of Extreme Encryption.
@@ -67,6 +74,7 @@ public class Application {
 	private static Application application;
 	
 	// Other Attributes.
+	int CertificateId;
 	public int old_version;
 	public int seedkey;
 	ConnectionManager connection_manager;
@@ -83,6 +91,7 @@ public class Application {
 	private Application(){
 		// Nothing to do in constructor.
 		initialized = false;
+		logonURL = "";
 	}
 	
 	public void initialize(){
@@ -95,20 +104,28 @@ public class Application {
 		connection_manager = ConnectionManager.get_instance(context);
 	}
 	
-	public String perform_logon(String url) throws Exception {
+	public String perform_logon() throws Exception {
 		
 		/*///
 		We will trust only our own certificate...
 		*////
+		
+		// Check Logon URL.
+		if(logonURL.contentEquals("")){
+			// URL is blank ! WTF !
+			throw new Exception("Logon URL could not be determined. " +
+					"Login is not possible. Please inform the developer.");
+		}
 		
         String user;
         if(password == null || password.contentEquals("")){
         	throw new Exception("Password not maintained.");
         }
         
-		// Create a new HttpClient and Post Header  
+		// Create a new HttpClient and Post Header 
+        Log.i(Application.TAG, "Logging(HttpPost) with URL:" + logonURL);
         HttpClient httpclient = new myHTTPClient(context);
-        HttpPost httppost = new HttpPost(url);
+        HttpPost httppost = new HttpPost(logonURL);
         try {
         	// Try to Login
         	if(isSAPUserId){
@@ -130,8 +147,13 @@ public class Application {
         	// Check if Internet Connection is available now or not !
         	connection_manager.IsInternetOn();
         	return success;
-        	           
-        } catch (Exception e) {
+
+        } catch (SSLException e){
+        	// Security Certificate was not validated !
+        	tracker.trackPageView("/Failed");
+        	throw e;
+        }
+        catch (Exception e) {
 			// Any Generic Exception...
         	tracker.trackPageView("/Failed");
         	throw e;

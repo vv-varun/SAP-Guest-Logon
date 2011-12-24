@@ -23,6 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package org.varunverma.sapguestlogon.UI;
 
+import org.varunverma.sapguestlogon.R;
 import org.varunverma.sapguestlogon.Application.Application;
 
 import android.content.BroadcastReceiver;
@@ -30,6 +31,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.util.Log;
 
 /**
  * This is the broad cast receiver. 
@@ -44,18 +46,23 @@ public class StartApplication extends BroadcastReceiver {
 		// This is called when WiFi State Changes.
 		Application application = Application.get_instance();
 		application.context = context;
+		application.seedkey = R.string.seed;
 		application.initialize();
+		Log.v(Application.TAG, "Application Initialized from BroadCast Reciever.");
 			
 		if(!application.EULAAccepted){
+			Log.w(Application.TAG, "Application stopped from BroadCast Reciever becuase EULA not accepted.");
 			return;
 		}
 		
 		if(application.EncryptionEnabled){
 			// In case of Extreme Encryption, the Automatic Logon is not enabled.
+			Log.w(Application.TAG, "Application stopped from BroadCast Reciever becuase Encryption is enabled!");
 			return;
 		}
 		
 		if(application.user.contentEquals("") || application.password.contentEquals("")){
+			Log.w(Application.TAG, "Application stopped from BroadCast Reciever becuase LogonData not maintained!");
 			return;
 		}
 		
@@ -66,6 +73,7 @@ public class StartApplication extends BroadcastReceiver {
 		if(ssid == null){
 			Intent i = new Intent(context, LogonService.class);
 			context.stopService(i);
+			Log.w(Application.TAG, "Service STOPPED rom BroadCase Reciever");
 			return;
 		}
 		if(ssid.contains("SAP") && ssid.contains("Guest")){
@@ -74,14 +82,13 @@ public class StartApplication extends BroadcastReceiver {
 			long delay = 15 * 1000;		// 15 sec in milli seconds
 			i.putExtra("Delay", delay);
 			context.startService(i);
-		}
-		else if(ssid.contains("Zion")){
-			// --> Only for Testing
+			Log.i(Application.TAG, "Service started rom BroadCase Reciever");
 		}
 		else{
 			// Stop service in other cases also.
 			Intent i = new Intent(context, LogonService.class);
 			context.stopService(i);
+			Log.w(Application.TAG, "Service STOPPED rom BroadCase Reciever");
 		}
 	}
 }
