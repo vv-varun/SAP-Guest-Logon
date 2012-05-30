@@ -48,8 +48,8 @@ public class Application {
 	static final String success = "Logon successful. Enjoy SAP Guest Network connection :-)";
 	public static final String Preferences = "SAPGuestLogonPreferences";
 	public static final int EULA = 1;
-	public static final int current_version = 12;
-	public static final String Version = "6.7";
+	public static final int current_version = 14;
+	public static final String Version = "7.1";
 	
 	// Google Analytics Tracker.
 	public Tracker tracker;

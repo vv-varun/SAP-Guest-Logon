@@ -74,7 +74,8 @@ public class LogonTask extends AsyncTask<Void, String, LogonResult> {
 			result = new LogonResult(1);
 			
 			// Use Aruba Networks Certificate in this case.
-			application.CertificateId = R.raw.arubanetworks;
+			Log.i(Application.TAG, "Due to BAD URL, Security Certificate defaulted to: New ARUBANETWORKS.COM");
+			application.CertificateId = R.raw.arubanetworks_new;
 			application.logonURL = result.badURL = e.get_redirected_url();
 
 			result.success = false;
@@ -117,6 +118,7 @@ public class LogonTask extends AsyncTask<Void, String, LogonResult> {
 		
 		try {
 			// By-Default use the new certificate.
+			Log.i(Application.TAG, "Security Certificate defaulted to: New WLAN.SAP.COM");
 			application.CertificateId = R.raw.sapwlan_new;
 			
 			// Perform Logon.
@@ -140,6 +142,7 @@ public class LogonTask extends AsyncTask<Void, String, LogonResult> {
 				publishProgress("Let's try again with old certificate...\n");
 			
 				// Now, try to use the old certificate
+				Log.i(Application.TAG, "Security Certificate changed to: Old WLAN.SAP.COM");
 				application.CertificateId = R.raw.sapwlan;
 			
 				// Try to Perform Logon again.

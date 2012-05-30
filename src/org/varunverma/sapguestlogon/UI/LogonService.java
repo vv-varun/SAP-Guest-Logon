@@ -25,6 +25,7 @@ package org.varunverma.sapguestlogon.UI;
 
 import java.util.Timer;
 
+import org.varunverma.sapguestlogon.R;
 import org.varunverma.sapguestlogon.Application.Application;
 import org.varunverma.sapguestlogon.Application.LogonTimer;
 import org.varunverma.sapguestlogon.Application.Tracker;
@@ -63,7 +64,7 @@ public class LogonService extends Service {
 				
 		if(application.context == null){
 			application.context = getApplicationContext();
-			Log.v(Application.TAG, "Application Initialized from Service.");
+			Log.v(Application.TAG, "Application Context obtained from Service.");
 		}
 		
 		if(application.tracker == null){
@@ -76,7 +77,9 @@ public class LogonService extends Service {
 		
 		// Nothing wrong in initialization.
 		// Passwords are not read again !
+		application.seedkey = R.string.seed;
 		application.initialize();
+		Log.v(Application.TAG, "Application Initialized from Service.");
 		
 	}
 	
@@ -98,7 +101,8 @@ public class LogonService extends Service {
 		application.tracker.dispatch();
 		application.tracker.stop();
 		timer.cancel();
-		timer.purge();
+		int cancelledTasks = timer.purge();
+		Log.i(Application.TAG, "Timer Cancelled & Purged. No. of cancelled tasks = " + String.valueOf(cancelledTasks));
 		Log.i(Application.TAG, "Service Stoped!");
 		super.onDestroy();
 	}

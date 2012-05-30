@@ -146,6 +146,7 @@ public class ConnectionManager {
         		    	// Do we already have the redirected URL ?
         		    	if(application.logonURL.contentEquals("")){
         		    		// No, we don't have !!
+        		    		Log.i(Application.TAG, "Finding the new Logon URL..");
         		    		redirected_url = urlc.getURL().toString();
                 			Log.i(Application.TAG, "Internet Not available. URLC tells redirected URL=" + redirected_url);
                 			
@@ -164,6 +165,7 @@ public class ConnectionManager {
                 			
             		    }
             		    else{
+            		    	Log.i(Application.TAG, "Using the old Logon URL..");
             		    	redirected_url = application.logonURL;
             		    }           			
 
