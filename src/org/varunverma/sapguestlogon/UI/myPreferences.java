@@ -21,7 +21,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-package org.varunverma.sapguestlogon.UI;
+package org.varunverma.sapguestlogon.ui;
+
+import java.util.Locale;
 
 import org.varunverma.sapguestlogon.R;
 import org.varunverma.sapguestlogon.Application.Application;
@@ -152,7 +154,7 @@ public class myPreferences extends Activity
 		EditText edittext = (EditText) findViewById(R.id.user);
 		String user = edittext.getText().toString();
 		if(rb_int.isChecked()){
-			user = user.toUpperCase();
+			user = user.toUpperCase(Locale.US);
 		}
 		
 		edittext = (EditText) findViewById(R.id.password);

@@ -6,8 +6,26 @@
     <string name="app_name">SAP Guest Logon</string>
     <string name="New">Whats new</string>
     <string name="seed">MadarChod</string>
-    
-    <color name="white">#ffffffff</color>
-    <color name="black">#ff000000</color>
+    <string name="try_again">Try Again</string>
+    <string name="enter_master_key">Entery your Master Key</string>
+    <string name="go">Go</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+	<string name="use_sap_credentials">Use SAP Login Credentials</string>
+	<string name="use_external_credentials">Use external login Credentials</string>
+	<string name="sap_user_id">SAP User Id (I Number / C Number)</string>
+	<string name="sap_domain_pwd">SAP Domain Password</string>
+	<string name="user_id">User Id</string>
+	<string name="password">Password</string>
+	<string name="analytics">Analytics</string>
+	<string name="automatic_logon">Automatic Logon</string>
+	<string name="encrypt">Encrypt</string>
+	<string name="guest_logon_policy">Read Acceptable use policy for SAP Guest Network Access</string>
+	<string name="accept">Agree and Accept</string>
+	<string name="decline">Decline</string>
+	<string name="yes_continue">Yes, Continue</string>
+	<string name="no_dont">No, Don\'t</string>
+	
+	<color name="white">#ffffffff</color>
     
 </resources>

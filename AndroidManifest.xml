@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="org.varunverma.sapguestlogon"
-      android:versionCode="14" android:versionName="7.1">
+      android:versionCode="16" android:versionName="7.5">
 
    	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-      
+
+	<uses-feature android:name="android.hardware.wifi" android:required="true" />
+	<uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+	<uses-feature android:name="android.hardware.location" android:required="false" />
+	<uses-feature android:name="android.hardware.location.network" android:required="false" />
+	<uses-feature android:name="android.hardware.location.gps" android:required="false" />
+	
+	<uses-sdk android:minSdkVersion="8"
+	    android:targetSdkVersion="16" />
+	
     <application android:icon="@drawable/icon"
+        android:allowBackup="false"
     	android:label="@string/app_name"
-    	android:allowClearUserData="true" android:debuggable="false">
+    	android:allowClearUserData="true" >
         
-        <activity android:name=".UI.SAPGuestLogon"
+        <activity android:name=".ui.SAPGuestLogon"
         	android:configChanges="orientation|keyboardHidden"
         	android:label="@string/app_name">
             <intent-filter>
@@ -20,30 +30,34 @@
             </intent-filter>
         </activity>
 
-		<activity android:name=".UI.myPreferences"
+		<activity android:name=".ui.myPreferences"
 			android:configChanges="orientation|keyboardHidden"
+			android:exported="false"
 			android:label="@string/app_name">
 			<intent-filter>
 				<action android:name="android.intent.action.PREFERENCES"/>
 			</intent-filter>
 		</activity>
 		
-		<activity android:name=".UI.ExtraSettings"
+		<activity android:name=".ui.ExtraSettings"
 			android:configChanges="orientation|keyboardHidden"
+			android:exported="false"
 			android:label="@string/app_name">
 			<intent-filter>
 				<action android:name="android.intent.action.EXTRA_PREFERENCES"/>
 			</intent-filter>
 		</activity>
 
-		<activity android:name=".UI.DisplayInfo"
+		<activity android:name=".ui.DisplayInfo"
+		    android:exported="false"
 			android:label="@string/app_name">
 			<intent-filter>
 				<action android:name="android.intent.action.INFO"/>
 			</intent-filter>
 		</activity>
 		
-		<activity android:name=".UI.Eula"
+		<activity android:name=".ui.Eula"
+		    android:exported="false"
 			android:configChanges="orientation|keyboardHidden"
 			android:label="@string/app_name">
 			<intent-filter>
@@ -51,13 +65,14 @@
 			</intent-filter>
 		</activity>
 
-		<service android:name=".UI.LogonService" >
+		<service android:name=".ui.LogonService" 
+		    android:exported="false" >
 			<intent-filter>
 				<action android:name=".LogonService" />
 			</intent-filter>
 		</service>
 		
-		<receiver android:name=".UI.StartApplication" >
+		<receiver android:name=".ui.StartApplication" >
 			<intent-filter>
 				<action android:name="android.net.wifi.STATE_CHANGE" />
 				<category android:name="android.intent.category.HOME" />
@@ -65,13 +80,5 @@
 		</receiver>
 		
     </application>
-	
-	<uses-sdk android:minSdkVersion="7" />
-	
-	<uses-feature android:name="android.hardware.wifi" android:required="true" />
-	<uses-feature android:name="android.hardware.touchscreen" android:required="false" />
-	<uses-feature android:name="android.hardware.location" android:required="false" />
-	<uses-feature android:name="android.hardware.location.network" android:required="false" />
-	<uses-feature android:name="android.hardware.location.gps" android:required="false" />
 	
 </manifest> 

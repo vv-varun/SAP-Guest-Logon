@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-package org.varunverma.sapguestlogon.UI;
+package org.varunverma.sapguestlogon.ui;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -47,7 +47,6 @@ public class DisplayInfo extends Activity {
         setContentView(R.layout.info);
         
         WebView my_web_view = (WebView) findViewById(R.id.info);       
-        my_web_view.getSettings().setJavaScriptEnabled(true);
         
         int res_id = this.getIntent().getIntExtra("Type", -1);
         if(res_id == -1){

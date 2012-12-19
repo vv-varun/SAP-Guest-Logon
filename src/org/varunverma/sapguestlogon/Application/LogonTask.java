@@ -47,7 +47,7 @@ public class LogonTask extends AsyncTask<Void, String, LogonResult> {
 		Log.i(Application.TAG, "Logon Task started.");
 		
 		try {
-			publishProgress("Checking Internet Connection...\n");
+			publishProgress("Checking Internet Connection... (This may take upto 30 seconds...)\n");
 			// Check if Internet is on... 
 			application.connection_manager.IsInternetOn();
 			
@@ -86,6 +86,8 @@ public class LogonTask extends AsyncTask<Void, String, LogonResult> {
 			// URL Redirected ! Looks like we have to logon ...
 			// Set the Logon URL.
 			application.logonURL = e.get_redirected_url();
+			
+			publishProgress("NO INTERNET: Performing Log-On on URL:" + application.logonURL + "\n");
 			
 			result = performLogon();
 			return result;

@@ -1,70 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
-	
-	<RadioGroup android:id="@+id/user_type"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:orientation="vertical" >
-		
-		<RadioButton android:id="@+id/internal"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="Use SAP Login Credentials" >
-		</RadioButton>
-		
-		<RadioButton android:id="@+id/external"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="Use external login Credentials" >
-		</RadioButton>
-		
-	</RadioGroup>
-	        
-    <TextView android:id="@+id/User"
-    	android:text="SAP User Id (I Number / C Number)"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
-    </TextView>
-    <EditText
-        android:id="@+id/user"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@android:drawable/editbox_background" >
-    </EditText>
-        
-    <TextView android:id="@+id/Password"
-          android:text="SAP Domain Password"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content" >
-    </TextView>
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:drawable/editbox_background" android:password="true" >
-    </EditText>
-        
-    <Button
-       	android:id="@+id/save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/save"
-        android:text="  Save  " >
-    </Button>
+        android:orientation="vertical" >
 
-	<TextView android:id="@+id/Help"
-          android:textStyle="bold"
-          android:textSize="16px"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content" >
-    </TextView>
+        <RadioGroup
+            android:id="@+id/user_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-</LinearLayout>
+            <RadioButton
+                android:id="@+id/internal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/use_sap_credentials" >
+            </RadioButton>
+
+            <RadioButton
+                android:id="@+id/external"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/use_external_credentials" >
+            </RadioButton>
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/User"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sap_user_id" >
+        </TextView>
+
+        <EditText
+            android:id="@+id/user"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/editbox_background"
+            android:hint="@string/user_id" >
+        </EditText>
+
+        <TextView
+            android:id="@+id/Password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sap_domain_pwd" >
+        </TextView>
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/editbox_background"
+            android:hint="@string/password"
+            android:inputType="textPassword" >
+        </EditText>
+
+        <Button
+            android:id="@+id/save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/save"
+            android:drawablePadding="10dp"
+            android:text="@string/save" >
+        </Button>
+
+        <TextView
+            android:id="@+id/Help"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold" >
+        </TextView>
+    </LinearLayout>
+
 </ScrollView>

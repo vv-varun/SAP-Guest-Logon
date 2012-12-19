@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-package org.varunverma.sapguestlogon.UI;
+package org.varunverma.sapguestlogon.ui;
 
 import org.varunverma.sapguestlogon.R;
 import org.varunverma.sapguestlogon.Application.Application;

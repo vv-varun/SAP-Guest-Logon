@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-package org.varunverma.sapguestlogon.UI;
+package org.varunverma.sapguestlogon.ui;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -128,7 +128,7 @@ public class Eula extends Activity implements OnClickListener {
 			break;
 			
 		case R.id.SAPEULA:
-			String url = "https://wlan.sap.com/upload/custom/SAP-CP-Guest/acceptableusepolicy.html";
+			String url = "https://apj-guest.wlan.sap.com/public/acceptableusepolicy.htm";
 			final Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse(url));
 			startActivity(intent);
 			break;

@@ -37,6 +37,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
 
 //	This is the main application class. Will be a singleton.
@@ -48,8 +49,8 @@ public class Application {
 	static final String success = "Logon successful. Enjoy SAP Guest Network connection :-)";
 	public static final String Preferences = "SAPGuestLogonPreferences";
 	public static final int EULA = 1;
-	public static final int current_version = 14;
-	public static final String Version = "7.1";
+	public static int current_version;
+	public static String Version;
 	
 	// Google Analytics Tracker.
 	public Tracker tracker;
@@ -102,6 +103,16 @@ public class Application {
 		seed = (String) context.getResources().getText(seedkey);
 		read_preferences();
 		connection_manager = ConnectionManager.get_instance(context);
+		
+		try {
+			current_version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
+			Version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+		} catch (NameNotFoundException e) {
+			current_version = 0;
+			Version = "1.0";
+			Log.e(TAG, e.getMessage(), e);
+		}
+		
 	}
 	
 	public String perform_logon() throws Exception {
@@ -137,7 +148,8 @@ public class Application {
         	
         	List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);  
         	nameValuePairs.add(new BasicNameValuePair("user", user));  
-        	nameValuePairs.add(new BasicNameValuePair("password", password));  
+        	nameValuePairs.add(new BasicNameValuePair("password", password));
+        	nameValuePairs.add(new BasicNameValuePair("visitor_accept_terms", "1"));
         	httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));  
 
         	//Execute HTTP Post Request  

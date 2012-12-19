@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-package org.varunverma.sapguestlogon.UI;
+package org.varunverma.sapguestlogon.ui;
 
 import org.varunverma.sapguestlogon.R;
 import org.varunverma.sapguestlogon.Application.Application;
@@ -53,6 +53,7 @@ public class SAPGuestLogon extends Activity implements LogonTaskProgressUpdate, 
 	
 	private Tracker tracker;
 	private TextView tv;
+	private Button tryAgain;
 	private Application application;
 	private EditText master_key;
 	private Dialog dialog;
@@ -80,6 +81,19 @@ public class SAPGuestLogon extends Activity implements LogonTaskProgressUpdate, 
     	
     	setContentView(R.layout.main);
         tv = (TextView) findViewById(R.id.tv);
+        
+        // Button to Try Again - will be disabled by default !
+        tryAgain = (Button) findViewById(R.id.try_again);
+        tryAgain.setVisibility(Button.GONE);
+        tryAgain.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				tv.setText("Welcome...\n");
+				performLogon();
+			}
+        	
+        });
         
         if(application.EULAAccepted){
         	StartMainActivity();
@@ -262,6 +276,7 @@ public class SAPGuestLogon extends Activity implements LogonTaskProgressUpdate, 
 		
 		if(result.isTaskSuccessful()){
 			// Show Success
+			tryAgain.setVisibility(Button.GONE);
 			Log.v(Application.TAG, "Logon Task was successfully executed.");
 			UpdateTextView("Done... Bye.\n");
 			start_service();
@@ -277,6 +292,7 @@ public class SAPGuestLogon extends Activity implements LogonTaskProgressUpdate, 
 				confirmBadURLLogin(result.getBadURL());
 			}
 			else{
+				tryAgain.setVisibility(Button.VISIBLE);
 				UpdateTextView("Please try again... \n");
 				Log.w(Application.TAG, "Logon Task Failed!");
 				start_service();

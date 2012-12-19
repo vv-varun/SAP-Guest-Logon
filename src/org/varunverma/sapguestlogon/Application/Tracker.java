@@ -48,7 +48,7 @@ public class Tracker {
 	public void start(String id, Context context) {
 		// Start Tracker
 		if(enabled){
-			tracker.start(id, context);
+			tracker.startNewSession(id, context);
 		}
 	}
 
@@ -83,7 +83,7 @@ public class Tracker {
 	public void stop() {
 		// Stop Tracker
 		if(enabled){
-			tracker.stop();
+			tracker.stopSession();
 		}
 	}
 	

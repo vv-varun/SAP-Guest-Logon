@@ -28,8 +28,8 @@ import java.util.TimerTask;
 import javax.net.ssl.SSLException;
 
 import org.varunverma.sapguestlogon.R;
-import org.varunverma.sapguestlogon.UI.LogonService;
-import org.varunverma.sapguestlogon.UI.SAPGuestLogon;
+import org.varunverma.sapguestlogon.ui.LogonService;
+import org.varunverma.sapguestlogon.ui.SAPGuestLogon;
 
 import android.app.Notification;
 import android.app.NotificationManager;

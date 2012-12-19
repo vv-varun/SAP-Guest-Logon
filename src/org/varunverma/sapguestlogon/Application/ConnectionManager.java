@@ -34,6 +34,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -103,7 +105,7 @@ public class ConnectionManager {
             		urlc.setDefaultUseCaches(false);
             		urlc.setUseCaches(false);
             		
-            		urlc.setConnectTimeout(5000 * 10); // Timeout is in seconds
+            		urlc.setConnectTimeout(1000 * 20); // Timeout is in seconds
             		urlc.connect();
             		
             		boolean isReachable = false;
@@ -115,6 +117,10 @@ public class ConnectionManager {
             			Log.i(Application.TAG, "Tryng to Query:" + queryURL + " via HttpGet.");
             			
             			HttpClient httpclient = new DefaultHttpClient();
+            			HttpParams httpParameters = httpclient.getParams();
+            			HttpConnectionParams.setConnectionTimeout(httpParameters, 20 * 1000);
+            			HttpConnectionParams.setSoTimeout(httpParameters, 20 * 1000);
+            			
                 		HttpGet httpGet = new HttpGet(queryURL);
                 		HttpResponse response = httpclient.execute(httpGet);
                 		
@@ -134,9 +140,13 @@ public class ConnectionManager {
             			Log.i(Application.TAG, "Exception in HttpGet connection test", e);
             		}
         			
-            		@SuppressWarnings("unused")
-            		InputStream in = new BufferedInputStream(urlc.getInputStream());
-        		    int response_code = urlc.getResponseCode();
+            		int response_code;
+            		try{
+            			response_code = urlc.getResponseCode();
+            		}catch(IOException e){
+            			response_code = -1;
+            		}
+        		    
         		    Log.i(Application.TAG, "URL-Connection response code:" + String.valueOf(response_code));
         		    
         		    if(!isReachable || response_code!= 200){
@@ -150,6 +160,14 @@ public class ConnectionManager {
         		    		redirected_url = urlc.getURL().toString();
                 			Log.i(Application.TAG, "Internet Not available. URLC tells redirected URL=" + redirected_url);
                 			
+                			/*
+                			 * Hard code the Re-directed URL : 
+                			 * We are hard coding to solve the temporary bugs.
+                			 * Ideally, we should figure out the URL, but that not happening !!
+                			 */
+                			Log.i(Application.TAG, "Redirected URL manually set to wlan.sap.com");
+                			redirected_url = "https://securelogin.wlan.sap.com/cgi-bin/login";
+                			
                 			if(redirected_url.contentEquals(google)){
                 			//	WTF .. how can I be redirected to myself !
                 				Log.i(Application.TAG, "As per URLC, redirected URL is same as google. So setting it to SPACE");
@@ -158,7 +176,7 @@ public class ConnectionManager {
                 			
                 			if (redirected_url.contentEquals("")) {
                 				// Hard code the redirected URL !
-                				redirected_url = "https://wlan.sap.com/cgi-bin/login";
+                				redirected_url = "https://securelogin.wlan.sap.com/cgi-bin/login";
                 				Log.i(Application.TAG, "Redirected URL manually set to wlan.sap.com");
                 				redirected_url = validateURL(redirected_url);
                 			}
